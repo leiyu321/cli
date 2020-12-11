@@ -125,6 +125,8 @@ type containerOptions struct {
 	autoRemove         bool
 	init               bool
 
+	bandwidth opts.MemBytes
+
 	Image string
 	Args  []string
 }
@@ -231,6 +233,8 @@ func addFlags(flags *pflag.FlagSet) *containerOptions {
 	flags.Var(&copts.aliases, "net-alias", "Add network-scoped alias for the container")
 	flags.Var(&copts.aliases, "network-alias", "Add network-scoped alias for the container")
 	flags.MarkHidden("net-alias")
+	//add "--bandwidth"
+	flags.Var(&copts.bandwidth, "bandwidth", "bandwidth for each container")
 
 	// Logging and storage
 	flags.StringVar(&copts.loggingDriver, "log-driver", "", "Logging driver for the container")
@@ -651,6 +655,7 @@ func parse(flags *pflag.FlagSet, copts *containerOptions, serverOS string) (*con
 		Mounts:         mounts,
 		MaskedPaths:    maskedPaths,
 		ReadonlyPaths:  readonlyPaths,
+		Bandwidth:      copts.bandwidth.Value(),
 	}
 
 	if copts.autoRemove && !hostConfig.RestartPolicy.IsNone() {

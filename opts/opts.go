@@ -521,3 +521,44 @@ func (m *MemSwapBytes) UnmarshalJSON(s []byte) error {
 	b := MemBytes(*m)
 	return b.UnmarshalJSON(s)
 }
+
+// BandBytes is a type for human readable memory bytes (like 128M, 2g, etc)
+type BandBytes int64
+
+// String returns the string format of the human readable memory bytes
+func (b *BandBytes) String() string {
+	// NOTE: In spf13/pflag/flag.go, "0" is considered as "zero value" while "0 B" is not.
+	// We return "0" in case value is 0 here so that the default value is hidden.
+	// (Sometimes "default 0 B" is actually misleading)
+	if b.Value() != 0 {
+		return units.BytesSize(float64(b.Value()))
+	}
+	return "0"
+}
+
+// Set sets the value of the MemBytes by passing a string
+func (b *BandBytes) Set(value string) error {
+	val, err := units.RAMInBytes(value)
+	*b = BandBytes(val)
+	return err
+}
+
+// Type returns the type
+func (b *BandBytes) Type() string {
+	return "bytes"
+}
+
+// Value returns the value in int64
+func (b *BandBytes) Value() int64 {
+	return int64(*b)
+}
+
+// UnmarshalJSON is the customized unmarshaler for MemBytes
+func (b *BandBytes) UnmarshalJSON(s []byte) error {
+	if len(s) <= 2 || s[0] != '"' || s[len(s)-1] != '"' {
+		return fmt.Errorf("invalid size: %q", s)
+	}
+	val, err := units.RAMInBytes(string(s[1 : len(s)-1]))
+	*b = BandBytes(val)
+	return err
+}
