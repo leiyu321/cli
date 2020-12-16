@@ -100,6 +100,10 @@ func runContainer(dockerCli command.Cli, opts *runOptions, copts *containerOptio
 
 	config.ArgsEscaped = false
 
+	// fmt.Fprintln(stdout, "In runContainer function:")
+	// fmt.Fprintln(stdout, hostConfig.Bandwidth)
+	// fmt.Fprintln(stdout, copts.bandwidth.Value())
+
 	if !opts.detach {
 		if err := dockerCli.In().CheckTty(config.AttachStdin, config.Tty); err != nil {
 			return err

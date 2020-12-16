@@ -658,6 +658,8 @@ func parse(flags *pflag.FlagSet, copts *containerOptions, serverOS string) (*con
 		Bandwidth:      copts.bandwidth.Value(),
 	}
 
+	// fmt.Printf("In parse function:%d,%d\n",hostConfig.Bandwidth,copts.bandwidth.Value())
+
 	if copts.autoRemove && !hostConfig.RestartPolicy.IsNone() {
 		return nil, errors.Errorf("Conflicting options: --restart and --rm")
 	}
