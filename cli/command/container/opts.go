@@ -234,7 +234,7 @@ func addFlags(flags *pflag.FlagSet) *containerOptions {
 	flags.Var(&copts.aliases, "network-alias", "Add network-scoped alias for the container")
 	flags.MarkHidden("net-alias")
 	//add "--bandwidth"
-	flags.Var(&copts.bandwidth, "bandwidth", "bandwidth for each container")
+	flags.Var(&copts.bandwidth, "bandwidth", "bandwidth(k,m,g,t) for each container(bps)")
 
 	// Logging and storage
 	flags.StringVar(&copts.loggingDriver, "log-driver", "", "Logging driver for the container")
