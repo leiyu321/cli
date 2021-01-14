@@ -126,6 +126,7 @@ type containerOptions struct {
 	init               bool
 
 	bandwidth opts.MemBytes
+	fmode     string
 
 	Image string
 	Args  []string
@@ -235,6 +236,7 @@ func addFlags(flags *pflag.FlagSet) *containerOptions {
 	flags.MarkHidden("net-alias")
 	//add "--bandwidth"
 	flags.Var(&copts.bandwidth, "bandwidth", "bandwidth(k,m,g,t) for each container(bps)")
+	flags.StringVar(&copts.fmode, "fmode", "", "tc filter mode(u32 or cgroup)")
 
 	// Logging and storage
 	flags.StringVar(&copts.loggingDriver, "log-driver", "", "Logging driver for the container")
@@ -656,6 +658,7 @@ func parse(flags *pflag.FlagSet, copts *containerOptions, serverOS string) (*con
 		MaskedPaths:    maskedPaths,
 		ReadonlyPaths:  readonlyPaths,
 		Bandwidth:      copts.bandwidth.Value(),
+		Fmode:          copts.fmode,
 	}
 
 	// fmt.Printf("In parse function:%d,%d\n",hostConfig.Bandwidth,copts.bandwidth.Value())
