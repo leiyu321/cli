@@ -25,7 +25,7 @@ type configWrapper struct {
 func (cli *Client) ContainerCreate(ctx context.Context, config *container.Config, hostConfig *container.HostConfig, networkingConfig *network.NetworkingConfig, platform *specs.Platform, containerName string) (container.ContainerCreateCreatedBody, error) {
 	var response container.ContainerCreateCreatedBody
 
-	fmt.Println("In ContainerCreate function:%d", hostConfig.Bandwidth)
+	fmt.Println("In ContainerCreate function:%d;;fmode:%s", hostConfig.Bandwidth, hostConfig.Fmode)
 
 	if err := cli.NewVersionError("1.25", "stop timeout"); config != nil && config.StopTimeout != nil && err != nil {
 		return response, err
